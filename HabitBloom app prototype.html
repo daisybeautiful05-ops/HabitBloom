@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>HabitBloom</title>
+<style>
+:root{--bg:#FFF8EA;--card:#fff;--ink:#14412F;--ink2:#4A6B59;--line:rgba(20,65,47,.15);--mint:#E6F2EA;--nav:#14412F;--navink:#FFF1D6;--leaf:#7BD389;--pink:#FF6F9C;--sp:#FFC2D6;--yel:#FFD166;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E2E22;--card:#14412F;--ink:#FFF1D6;--ink2:#B9CDBF;--line:rgba(255,241,214,.18);--mint:#1E5A41;--nav:#08201A}}
+:root[data-theme="dark"]{--bg:#0E2E22;--card:#14412F;--ink:#FFF1D6;--ink2:#B9CDBF;--line:rgba(255,241,214,.18);--mint:#1E5A41;--nav:#08201A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{max-width:430px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative;overflow:hidden}
+main{flex:1;overflow:auto;padding:18px 16px 8px}.scr{display:none}.scr.on{display:block}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1{font-size:24px;font-weight:600}h2{font-size:16px;font-weight:600;margin:16px 0 8px}.sub{font-size:13px;color:var(--ink2)}
+.row{display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;width:100%;text-align:left}
+.ic{width:38px;height:38px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;flex:none}
+.ck{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#14412F;flex:none}
+.ck .i{width:16px;height:16px;stroke-width:3;opacity:0}.done .ck{background:var(--leaf);border-color:var(--leaf)}.done .ck .i{opacity:1}
+.hero{background:#14412F;color:#FFF1D6;border-radius:18px;padding:16px;margin:14px 0 4px}
+.bar{height:8px;background:rgba(255,241,214,.2);border-radius:4px;margin-top:10px}.bar div{height:8px;background:var(--leaf);border-radius:4px;transition:width .3s}
+.chip{background:var(--sp);color:#14412F;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}.stat b{font-size:24px;display:block}
+.bars{display:flex;align-items:flex-end;gap:8px;height:150px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 12px 10px}
+.bars div{flex:1;text-align:center;font-size:11px;color:var(--ink2);display:flex;flex-direction:column;justify-content:flex-end;height:100%}.bars span{display:block;background:var(--leaf);border-radius:6px 6px 2px 2px;margin-bottom:4px}.bars .t span{background:var(--pink)}
+nav{display:flex;justify-content:space-around;align-items:center;background:var(--nav);color:var(--navink);margin:8px 12px 12px;padding:10px 22px;border-radius:22px}
+nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;opacity:.65}nav button.on{opacity:1}
+.fab{width:52px;height:52px;border-radius:50%;background:var(--pink);color:#14412F;margin-top:-26px;border:4px solid var(--bg);display:flex;align-items:center;justify-content:center;opacity:1!important}
+.splash{position:absolute;inset:0;background:#14412F;color:#FFF1D6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9;transition:opacity .5s}
+.sheet{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:8}.sheet.on{display:flex}
+.pan{background:var(--bg);width:100%;border-radius:24px 24px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+input{width:100%;font:inherit;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-top:8px}
+.pick{display:flex;gap:10px;margin:8px 0}.pick button{width:44px;height:44px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;border:2px solid transparent}.pick button.on{border-color:var(--pink)}
+.save{width:100%;background:var(--pink);color:#14412F;font-weight:600;padding:14px;border-radius:14px;margin-top:10px}.err{color:#C0392B;font-size:13px;min-height:18px;margin-top:6px}
+.petal{transition:opacity .4s,transform .4s;transform-origin:100px 85px}
+.auth{position:absolute;inset:0;background:var(--bg);z-index:7;display:none;flex-direction:column;padding:24px 20px;overflow:auto}.auth.on{display:flex}
+.ghost{width:100%;border:1px solid var(--line);color:var(--ink);padding:14px;border-radius:14px;font-weight:600;margin-top:10px}
+.link{text-decoration:underline;font-weight:600}
+.banner{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--mint);border-radius:14px;padding:10px 12px;margin-top:12px;font-size:13px}.banner button{background:var(--pink);color:#14412F;font-weight:600;padding:8px 12px;border-radius:10px;white-space:nowrap}
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:5;display:none}.scrim.on{display:block}
+.drawer{position:absolute;top:0;bottom:0;left:0;width:80%;max-width:330px;background:var(--bg);z-index:6;transform:translateX(-102%);transition:transform .3s;padding:20px 16px;overflow:auto;box-shadow:4px 0 24px rgba(0,0,0,.25);visibility:hidden}.drawer.on{transform:none;visibility:visible}
+.drow{display:flex;align-items:center;gap:10px;padding:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:8px}.drow b{display:block;font-size:14px}.drow .sub{font-size:12px}.drow.done .sub{color:#2E8B57;font-weight:600}
+.rm{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink2)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/></symbol>
+<symbol id="chart" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+<symbol id="drop" viewBox="0 0 24 24"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></symbol>
+<symbol id="book" viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M20 14a8 8 0 1 1-10-10 6 6 0 0 0 10 10z"/></symbol>
+<symbol id="pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19z"/></symbol>
+<symbol id="flower" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M12 9.5C9 6 10 3 12 3s3 3 0 6.5zM14.5 12c3.500-3 6.500-2 6.500 0s-3 3-6.500 0zM12 14.500c3 3.500 2 6.500 0 6.500s-3-3 0-6.500zM9.500 12C6 15 3 14 3 12s3-3 6.500 0z"/></symbol>
+<symbol id="logo" viewBox="65 25 250 250"><rect x="65" y="25" width="250" height="250" rx="56" fill="#14412F"/><g fill="none" stroke="#FFF1D6"><path d="M112 66V224" stroke-width="18"/><path d="M170 132V224" stroke-width="18"/><path d="M94 68H130M94 226H130M154 134H182M154 226H182" stroke-width="5" stroke-linecap="round"/><path d="M118 150L164 178" stroke-width="6" stroke-linecap="round"/><path d="M210 132V224" stroke-width="18"/><path d="M198 134H226" stroke-width="5" stroke-linecap="round"/><path d="M210 132L246 80M254 154L210 172M254 222H210" stroke-width="5" stroke-linecap="round"/><path d="M246 80C286 52 294 130 254 154C298 152 302 222 254 222" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></g><path d="M190 226C192 196 188 160 190 112" fill="none" stroke="#7BD389" stroke-width="4" stroke-linecap="round"/><g transform="translate(190,88)" fill="#FF6F9C"><ellipse cy="-18" rx="11" ry="18"/><ellipse cy="-18" rx="11" ry="18" transform="rotate(60)"/><ellipse cy="-18" rx="11" ry="18" transform="rotate(120)"/><ellipse cy="-18" rx="11" ry="18" transform="rotate(180)"/><ellipse cy="-18" rx="11" ry="18" transform="rotate(240)"/><ellipse cy="-18" rx="11" ry="18" transform="rotate(300)"/><circle r="7" fill="#FFD166"/></g></symbol>
+</defs></svg>
+<div class="app">
+<div class="auth on" id="auth"><div style="text-align:center;margin:10px 0 18px"><svg width="96" height="96"><use href="#logo"/></svg></div><h1 id="at">Welcome back</h1><p class="sub" id="as" style="margin-top:4px">Log in to continue your habits.</p>
+<input id="an" placeholder="Your name" aria-label="Name" maxlength="30" style="display:none"><input id="ae" type="email" placeholder="name@email.com" aria-label="Email"><input id="ap" type="password" placeholder="Password (6+ characters)" aria-label="Password">
+<div class="err" id="aerr"></div><button class="save" id="go">Log in</button>
+<p style="text-align:center;margin-top:14px;font-size:14px"><span id="tt">New here?</span> <button class="link" id="tg">Create an account</button></p>
+<div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px;color:var(--ink2);font-size:13px"><span style="flex:1;height:1px;background:var(--line)"></span>or<span style="flex:1;height:1px;background:var(--line)"></span></div>
+<button class="ghost" id="ex">Explore the app</button><p class="sub" style="text-align:center;margin-top:10px">No account needed to look around.</p></div>
+<div class="sheet" id="gate"><div class="pan"><div style="text-align:center"><svg width="64" height="64"><use href="#logo"/></svg></div><h1 style="margin-top:8px">Create an account to use HabitBloom</h1><p class="sub" style="margin:6px 0 4px">Save your habits, build streaks, and watch your garden bloom.</p><button class="save" id="gc">Create account</button><button class="ghost" id="gk">Keep exploring</button></div></div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="All habits"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:10px"><svg width="38" height="38"><use href="#logo"/></svg><div><b id="dn" style="font-size:16px">HabitBloom</b><p class="sub" id="dc"></p></div></div><button id="dx" aria-label="Close menu"><svg class="i"><use href="#x"/></svg></button></div>
+<h2>All habits</h2><div id="dlist"></div><button class="save" id="dadd">Add habit</button></aside>
+<div class="splash" id="splash"><svg width="150" height="150"><use href="#logo"/></svg><h1>HabitBloom</h1><p style="opacity:.8">Small habits. Big blooms.</p></div>
+<main>
+<section class="scr on" id="s-home">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:10px"><button id="menu" aria-label="Open all habits" style="width:40px;height:40px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center"><svg class="i"><use href="#menu"/></svg></button><div><p class="sub" id="hi">Good morning</p><h1>Today</h1></div></div><div style="display:flex;align-items:center;gap:8px"><button id="theme" aria-label="Switch light or dark theme"><svg class="i"><use href="#moon"/></svg></button><span class="chip" id="chip">12-day streak</span></div></div>
+<div class="banner" id="banner"><span>You're exploring. Create an account to track your own habits.</span><button id="bnr">Create account</button></div><div class="hero"><div style="display:flex;justify-content:space-between;align-items:baseline"><b id="cnt" style="font-size:18px"></b><span id="msg" style="font-size:13px;color:#7BD389"></span></div><div class="bar"><div id="bar"></div></div></div>
+<h2>Your habits</h2><div id="list"></div>
+</section>
+<section class="scr" id="s-garden">
+<h1>Your garden</h1><p class="sub" id="gsub"></p>
+<svg viewBox="0 0 200 230" width="100%" height="280" role="img" aria-label="A flower that blooms one petal per completed habit"><path d="M100 225C104 190 96 140 100 90" fill="none" stroke="#5FA777" stroke-width="5" stroke-linecap="round"/><path d="M100 190C80 185 68 172 66 158C86 160 100 172 100 190Z" fill="#7BD389"/><path d="M100 160C120 155 132 142 134 128C114 130 100 142 100 160Z" fill="#7BD389"/><g id="petals" fill="#FF6F9C"></g><circle cx="100" cy="85" r="14" fill="#FFD166"/></svg>
+<div class="grid"><div class="stat"><b id="g1">12</b><span class="sub">Day streak</span></div><div class="stat"><b id="g2">3</b><span class="sub">Flowers bloomed</span></div></div>
+<div id="badges"><h2>Badges</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip" style="background:var(--yel)">First bloom</span><span class="chip" style="background:var(--yel)">10-day streak</span><span class="chip" style="background:var(--mint);color:var(--ink)">30-day streak</span></div></div>
+</section>
+<section class="scr" id="s-prog">
+<h1>Progress</h1><p class="sub">Habits completed in the last 7 days</p><h2></h2>
+<div class="bars" id="bars"></div>
+<div class="grid"><div class="stat"><b id="rate"></b><span class="sub">Weekly average</span></div><div class="stat"><b id="best">21</b><span class="sub">Best streak</span></div></div>
+<button class="ghost" id="logout" style="margin-top:20px">Create account</button>
+</section>
+</main>
+<nav><button class="on" data-s="home"><svg class="i"><use href="#home"/></svg>Home</button><button data-s="garden"><svg class="i"><use href="#flower"/></svg>Garden</button><button class="fab" id="add" aria-label="Add habit"><svg class="i"><use href="#plus"/></svg></button><button data-s="prog"><svg class="i"><use href="#chart"/></svg>Progress</button></nav>
+<div class="sheet" id="sheet"><div class="pan"><h1>New habit</h1><input id="nm" placeholder="Stretch for 5 minutes" maxlength="30" aria-label="Habit name"><div class="err" id="err"></div><p class="sub">Pick an icon</p><div class="pick" id="pick"></div><button class="save" id="save">Add habit</button><button class="save" style="background:none;border:1px solid var(--line);color:var(--ink)" id="cancel">Cancel</button></div></div>
+</div>
+<script>
+var demo=[{n:'Drink water',s:'8 glasses',i:'drop',d:1},{n:'Morning walk',s:'20 minutes',i:'sun',d:1},{n:'Read 20 pages',s:'Before lunch',i:'book',d:1},{n:'Meditate',s:'10 minutes',i:'moon',d:0},{n:'Journal',s:'Before bed',i:'pen',d:0}],icons=['drop','sun','book','moon','pen'],sel='drop',days=['Tue','Wed','Thu','Fri','Sat','Sun','Mon'],H=[],past=[],users={},mode='login',guest=false;
+var $=function(id){return document.getElementById(id)};
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function ico(n){return '<svg class="i"><use href="#'+n+'"/></svg>'}
+function count(){return H.filter(function(h){return h.d}).length}
+function setDemo(on){H=on?demo.map(function(h){return Object.assign({},h)}):[];past=on?[4,5,3,5,4,2]:[0,0,0,0,0,0];$('chip').textContent=on?'12-day streak':'Day 1';$('g1').textContent=on?12:0;$('g2').textContent=on?3:0;$('best').textContent=on?21:0;$('badges').style.display=on?'':'none'}
+function render(){var n=count(),t=H.length,p=t?Math.round(n/t*100):0;
+$('list').innerHTML=t?H.map(function(h,k){return '<button class="row'+(h.d?' done':'')+'" data-k="'+k+'" aria-pressed="'+(h.d?'true':'false')+'"><span class="ic">'+ico(h.i)+'</span><span style="flex:1"><b style="display:block;font-size:15px">'+esc(h.n)+'</b><span class="sub">'+h.s+'</span></span><span class="ck">'+ico('check')+'</span></button>'}).join(''):'<p class="sub" style="padding:18px 4px">No habits yet. Tap the pink button to add your first one.</p>';
+$('cnt').textContent=n+' of '+t+' done';
+$('dc').textContent=t+(t===1?' habit':' habits')+' · '+n+' done today';
+$('dlist').innerHTML=t?H.map(function(h,k){return '<div class="drow'+(h.d?' done':'')+'"><span class="ic" style="width:32px;height:32px">'+ico(h.i)+'</span><span style="flex:1"><b>'+esc(h.n)+'</b><span class="sub">'+(h.d?'Done today':'To do')+'</span></span><button class="rm" data-k="'+k+'" aria-label="Remove '+esc(h.n)+'">'+ico('x')+'</button></div>'}).join(''):'<p class="sub">Nothing here yet. Add your first habit and it will show up in this list.</p>';$('bar').style.width=p+'%';
+$('msg').textContent=!t||!n?'Plant your first habit':n===t?'Fully bloomed today':n>=Math.ceil(t/2)?'Your garden is blooming':'Your garden is budding';
+var b=t?Math.round(n/t*5):0,ph='';for(var k=0;k<5;k++){ph+='<ellipse class="petal" cx="100" cy="55" rx="16" ry="30" transform="rotate('+(k*72)+' 100 85)" style="opacity:'+(k<b?1:.12)+'"/>'}
+$('petals').innerHTML=ph;$('gsub').textContent=b+' of 5 petals bloomed today';
+var all=past.concat([n]);$('bars').innerHTML=all.map(function(v,k){return '<div'+(k===6?' class="t"':'')+'><span style="height:'+Math.round(v/Math.max(t,5)*100)+'%"></span>'+days[k]+'</div>'}).join('');
+$('rate').textContent=Math.round(all.reduce(function(a,c){return a+c},0)/all.length/Math.max(t,5)*100)+'%'}
+function gateOn(){$('gate').classList.add('on')}
+function showAuth(m){mode=m;var su=m==='signup';$('auth').classList.add('on');$('at').textContent=su?'Create your account':'Welcome back';$('as').textContent=su?'Start building habits that bloom.':'Log in to continue your habits.';$('an').style.display=su?'':'none';$('go').textContent=su?'Create account':'Log in';$('tt').textContent=su?'Already have an account?':'New here?';$('tg').textContent=su?'Log in':'Create an account';$('aerr').textContent=''}
+function home(){document.querySelector('nav [data-s=home]').click()}
+function enter(name){$('auth').classList.remove('on');guest=false;setDemo(false);$('hi').textContent='Hi, '+name;$('dn').textContent=name;$('banner').style.display='none';$('logout').textContent='Log out';home();render()}
+$('go').onclick=function(){var em=$('ae').value.trim().toLowerCase(),pw=$('ap').value,nm=$('an').value.trim(),e=$('aerr');
+if(mode==='signup'&&!nm){e.textContent='Enter your name';return}
+if(!/^\S+@\S+\.\S+$/.test(em)){e.textContent='Enter a valid email address';return}
+if(pw.length<6){e.textContent='Use a password with at least 6 characters';return}
+if(mode==='signup'){if(users[em]){e.textContent='That email already has an account. Log in instead.';return}users[em]={name:nm,pw:pw};enter(nm)}
+else{if(!users[em]){e.textContent='No account found with that email. Create one to get started.';return}if(users[em].pw!==pw){e.textContent='That password is incorrect. Try again.';return}enter(users[em].name)}};
+$('tg').onclick=function(){showAuth(mode==='login'?'signup':'login')};
+['an','ae','ap'].forEach(function(id){$(id).oninput=function(){$('aerr').textContent=''};$(id).onkeydown=function(ev){if(ev.key==='Enter')$('go').click()}});
+$('ex').onclick=function(){$('auth').classList.remove('on');guest=true;setDemo(true);$('hi').textContent='Good morning';$('dn').textContent='Guest';$('banner').style.display='flex';$('logout').textContent='Create account';home();render()};
+$('bnr').onclick=function(){showAuth('signup')};
+$('logout').onclick=function(){if(guest){showAuth('signup')}else{$('ae').value='';$('ap').value='';$('an').value='';showAuth('login')}};
+$('gc').onclick=function(){$('gate').classList.remove('on');showAuth('signup')};$('gk').onclick=function(){$('gate').classList.remove('on')};
+$('list').onclick=function(e){var r=e.target.closest('.row');if(!r)return;if(guest){gateOn();return}H[+r.dataset.k].d^=1;render()};
+document.querySelectorAll('nav [data-s]').forEach(function(b){b.onclick=function(){document.querySelectorAll('.scr').forEach(function(x){x.classList.remove('on')});$('s-'+b.dataset.s).classList.add('on');document.querySelectorAll('nav [data-s]').forEach(function(x){x.classList.toggle('on',x===b)});document.querySelector('main').scrollTop=0}});
+$('pick').innerHTML=icons.map(function(n){return '<button data-n="'+n+'" class="'+(n===sel?'on':'')+'" aria-label="'+n+' icon">'+ico(n)+'</button>'}).join('');
+$('pick').onclick=function(e){var b=e.target.closest('button');if(!b)return;sel=b.dataset.n;document.querySelectorAll('#pick button').forEach(function(x){x.classList.toggle('on',x===b)})};
+$('add').onclick=function(){if(guest){gateOn();return}$('nm').value='';$('err').textContent='';$('sheet').classList.add('on');$('nm').focus()};
+$('cancel').onclick=function(){$('sheet').classList.remove('on')};
+$('nm').oninput=function(){$('err').textContent=''};
+$('save').onclick=function(){var v=$('nm').value.trim();if(!v){$('err').textContent='Enter a habit name';return}H.push({n:v,s:'New habit',i:sel,d:0});$('sheet').classList.remove('on');render()};
+$('theme').onclick=function(){var r=document.documentElement,dk=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dk?'light':'dark'};
+setTimeout(function(){$('splash').style.opacity=0;setTimeout(function(){$('splash').style.display='none'},500)},1800);
+$('splash').onclick=function(){$('splash').style.display='none'};
+function side(on){$('drawer').classList.toggle('on',on);$('scrim').classList.toggle('on',on)}
+$('menu').onclick=function(){side(true)};$('scrim').onclick=function(){side(false)};$('dx').onclick=function(){side(false)};
+$('dadd').onclick=function(){side(false);$('add').click()};
+$('dlist').onclick=function(e){var b=e.target.closest('.rm');if(!b)return;if(guest){side(false);gateOn();return}H.splice(+b.dataset.k,1);render()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')side(false)});
+setDemo(true);$('banner').style.display='none';render();
+</script></body></html>
