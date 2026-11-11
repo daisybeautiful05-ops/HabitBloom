@@ -81,8 +81,13 @@ button{
     background-color: rgb(216, 71, 95);
     color: white;
     border: none;
-    border-radius: 100px;
+    border-radius: 50px;
     cursor: pointer;
+}
+button:hover{
+    background-color: rgb(179, 36, 60);
+    opacity: 0.8;
+    color: #FFF1D6;
 }
 
 .button{
@@ -96,6 +101,11 @@ button{
     text-decoration: none;
     justify-content: center;
     text-align: center;
+}
+.button:hover{
+    background-color: #0c5538;
+    opacity: 0.8;
+    color: #FFF1D6;
 }
 @media (max-width: 820px) {
     section {

@@ -1,7 +1,37 @@
-*{
+body{
     background-color: #0c2c1f;
     color: #FFF1D6;
     padding: 0;
     align-items: center;
     text-align: center;
+}
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 5px;
+}
+header p,
+header h1{
+    margin: 0;
+}
+#back-home{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: #145239;
+    border-radius: 10px;
+}
+#back-home p{
+    margin-right: 20px;
+}
+#back-home a{
+    color: #FFF1D6;
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color:  rgb(216, 71, 95);
+    border-radius: 10px;
 }
